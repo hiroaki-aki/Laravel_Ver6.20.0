@@ -18,6 +18,9 @@ require File.expand_path(confDir + '/scripts/homestead.rb')
 Vagrant.require_version '>= 2.2.4'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    Encoding.default_external = 'UTF-8'
+
     if File.exist? aliasesPath then
         config.vm.provision "file", source: aliasesPath, destination: "/tmp/bash_aliases"
         config.vm.provision "shell" do |s|
@@ -50,4 +53,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         config.hostmanager.manage_host = true
         config.hostmanager.aliases = settings['sites'].map { |site| site['map'] }
     end
+
+    # nfs設定
+    config.vm.synced_folder 'C:\xampp\htdocs\akino\test\Laravel_test_ver6.20.0', "/home/vagrant/code", type: "nfs", nfs_export: true, nfs_version: 3
+
 end
